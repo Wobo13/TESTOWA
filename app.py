@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 from openai import OpenAI
 
 # --- KONFIGURACJA ---
-APP_VERSION = "V186 (Descriptive PL Categories)"
+APP_VERSION = "V187 (Admin Stats & Test Fix)"
 ADMIN_USER = "wobo"
 AUTH_FILE = "users_auth.json"
 SESSIONS_FILE = "sessions.json"
@@ -162,7 +162,6 @@ def check_test_answer(u_ans, q_obj):
 def get_openai_response(prompt_text, img_obj=None):
     if not API_KEY: raise Exception("Brak klucza API OpenAI.")
     client = OpenAI(api_key=API_KEY)
-    # POPRAWKA: Wzmocnienie prośby o polskie kategorie w system prompt
     messages = [{"role": "system", "content": "You are a professional German teacher. Output ONLY valid JSON. All category names MUST be descriptive, thematic (e.g. 'Owoce', 'Zawody', 'Dom') and in POLISH language. Never use 'Inne'."}]
     if img_obj:
         buffered = BytesIO()
@@ -305,7 +304,7 @@ if choice in ["📅 Powtórki", "🚀 Trening"]:
                     if st.button("Dalej ➡️", use_container_width=True):
                         st.session_state.n_idx += 1; st.session_state.n_m = "ask"; st.rerun()
 
-# --- 📝 TESTY ---
+# --- 📝 TESTY (NAPRAWA KEYERROR) ---
 elif choice == "📝 Testy":
     update_activity("Testy"); st.header("📝 Egzamin Kontekstowy")
     if len(st.session_state.flashcards) < 5: st.warning("Min. 5 słówek.")
@@ -321,11 +320,15 @@ elif choice == "📝 Testy":
                     else:
                         sample = random.sample(filtered, min(n_q, len(filtered)))
                         words_str = ", ".join([f"{w['de']} ({w['pl']})" for w in sample])
-                        prompt = f"Generate EXACTLY {len(sample)} questions for: {words_str}. Rotate types: 'LUKA', 'QUIZ', 'TLUMACZENIE'. Output JSON key 'questions'."
+                        prompt = f"Generate EXACTLY {len(sample)} German questions for: {words_str}. Rotate types: 'LUKA', 'QUIZ', 'TLUMACZENIE'. Provide 'correct', 'sentence', 'hint'. JSON key 'questions'."
                         try:
                             res = get_openai_response(prompt); data = parse_ai_json(res)
                             if data and "questions" in data:
-                                st.session_state.test_q, st.session_state.test_idx, st.session_state.test_score = data["questions"][:len(sample)], 0, 0
+                                # Walidacja pytań, aby uniknąć KeyError
+                                valid_qs = []
+                                for q in data["questions"]:
+                                    if all(k in q for k in ['type', 'correct', 'sentence']): valid_qs.append(q)
+                                st.session_state.test_q, st.session_state.test_idx, st.session_state.test_score = valid_qs[:len(sample)], 0, 0
                                 st.session_state.user_data["historical_cost"] += 0.01; st.rerun()
                         except Exception as e: st.error(f"Błąd AI: {e}")
         else:
@@ -334,10 +337,10 @@ elif choice == "📝 Testy":
                 q = qs[t_idx]; st.write(f"### Pytanie {t_idx+1} z {len(qs)}"); st.progress(t_idx / len(qs))
                 correct_w = q.get('correct', ''); hint = q.get('hint', 'brak')
                 place_h = " ".join(["_"] * len(correct_w)) if correct_w else "_______"
-                if q['type'] == "LUKA":
+                if q.get('type') == "LUKA":
                     st.info(f"Podpowiedź (PL): {hint}"); disp = q['sentence'].replace(correct_w, place_h).replace(correct_w.capitalize(), place_h)
                     st.markdown(f"#### `{disp}`"); u_ans = st.text_input("Wpisz słowo:", key=f"t_{t_idx}")
-                elif q['type'] == "QUIZ":
+                elif q.get('type') == "QUIZ":
                     st.info(f"Podpowiedź (PL): {hint}"); st.markdown(f"#### `{q['sentence'].replace(correct_w, '_______')}`")
                     opts = q.get('distractors', []) + [correct_w]; random.seed(t_idx); random.shuffle(opts)
                     u_ans = st.radio("Wybierz:", opts, key=f"t_{t_idx}")
@@ -358,7 +361,7 @@ elif choice == "📝 Testy":
                     is_ok = check_test_answer(q.get('user_ans',''), q)
                     icon, col = ("✅", "#2E7D32") if is_ok else ("❌", "#C62828")
                     with st.expander(f"{icon} Pytanie {i+1}"):
-                        st.write(f"**Zdanie:** {q['sentence']}")
+                        st.write(f"**Zdanie:** {q.get('sentence','')}")
                         st.markdown(f'<div style="border-left:5px solid {col}; padding-left:10px;">Twoja: {q.get("user_ans","")}<br>Poprawna: {q.get("correct","")}</div>', unsafe_allow_html=True)
                 if st.button("Powrót", use_container_width=True): del st.session_state.test_q; st.rerun()
 
@@ -428,10 +431,11 @@ elif choice == "📸 Skaner AI":
             added = 0
             for w in ed.to_dict('records'):
                 if 'de' in w and 'pl' in w and w['de'].lower() not in [x['de'].lower() for x in st.session_state.flashcards]:
-                    w.update({"next_review": str(today_dt), "date_added": str(today_dt)}); st.session_state.flashcards.append(w); added += 1
+                    w.update({"next_review": str(today_dt), "date_added": str(today_dt), "origin": "Skaner"})
+                    st.session_state.flashcards.append(w); added += 1
             force_save(); del st.session_state.pending; st.rerun()
 
-# --- 📦 GENERATOR SŁÓW (Wzmocnione Kategorie) ---
+# --- 📦 GENERATOR SŁÓW ---
 elif choice == "📦 Generator słów":
     update_activity("Generator")
     if "success_msg" in st.session_state: st.success(st.session_state.success_msg); del st.session_state.success_msg
@@ -442,23 +446,22 @@ elif choice == "📦 Generator słów":
                 try:
                     my_w = [x['de'].lower() for x in st.session_state.flashcards]
                     all_available = [w for w in VOCAB_DB.get(lvl, []) if w.lower() not in my_w]
-                    # POPRAWKA PROMPTU: Agresywne wymaganie opisowych polskich kategorii
                     if len(all_available) < 5:
-                        prompt = f"Generate EXACTLY 25 unique German words {lvl} NOT in: {my_w[:50]}. Provide descriptive Polish category for EACH (e.g. 'Emocje', 'Meble', 'Natura'). Do NOT use 'Inne' or 'Other'."
+                        prompt = f"Generate EXACTLY 25 unique German words {lvl} NOT in: {my_w[:50]}. Category names MUST be in Polish. JSON key 'flashcards'."
                     else:
                         selection = random.sample(all_available, min(25, len(all_available)))
-                        prompt = f"Translate THESE German words to PL: {selection}. Provide a DESCRIPTIVE Polish category name for EACH word (e.g. 'Zawody', 'Podróże', 'Sport'). Never use 'Inne'. JSON: flashcards: [{{de, pl, category, examples:[{{de,pl}}]}}]"
+                        prompt = f"Translate words to PL: {selection}. Polish categories. JSON: flashcards: [{{de, pl, category, examples:[{{de,pl}}]}}]"
                     res = get_openai_response(prompt); data = parse_ai_json(res)
                     if isinstance(data, dict) and "flashcards" in data:
                         added = 0
                         for w in data["flashcards"]:
                             t_de, t_pl = w.get('de') or w.get('word'), w.get('pl') or w.get('translation')
                             cat_raw = w.get('category', 'Inne')
-                            if cat_raw.lower() in ['inne', 'other', 'general']: cat_raw = 'Podstawowe'
+                            if cat_raw.lower() in ['inne', 'other']: cat_raw = 'Podstawowe'
                             if t_de and t_pl and t_de.lower() not in [x['de'].lower() for x in st.session_state.flashcards]:
-                                w.update({"de": t_de, "pl": t_pl, "next_review": str(today_dt), "date_added": str(today_dt), "category": f"{lvl} - {cat_raw}"})
+                                w.update({"de": t_de, "pl": t_pl, "next_review": str(today_dt), "date_added": str(today_dt), "category": f"{lvl} - {cat_raw}", "origin": "Generator"})
                                 st.session_state.flashcards.append(w); added += 1
-                        st.session_state.user_data["historical_cost"] += 0.01; force_save(); st.session_state.success_msg = f"🎉 Dodano dokładnie {added} słówek z kategoriami!"; st.rerun()
+                        st.session_state.user_data["historical_cost"] += 0.01; force_save(); st.session_state.success_msg = f"🎉 Dodano {added} słówek!"; st.rerun()
                 except Exception as e: st.error(f"Błąd: {e}")
 
 # --- ➕ DODAJ / 📖 SŁOWNIK ---
@@ -468,7 +471,8 @@ elif choice == "➕ Dodaj":
         de, pl, kat = st.text_input("Niemiecki"), st.text_input("Polski"), st.text_input("Kategoria")
         if st.form_submit_button("Zapisz"):
             if de and pl:
-                st.session_state.flashcards.append({"de":de, "pl":pl, "category":kat or "Inne", "next_review":str(today_dt), "date_added":str(today_dt), "examples":[]}); force_save(); st.success("Dodano!")
+                st.session_state.flashcards.append({"de":de, "pl":pl, "category":kat or "Inne", "next_review":str(today_dt), "date_added":str(today_dt), "examples":[], "origin": "Dodaj"})
+                force_save(); st.success("Dodano!")
 
 elif choice == "📖 Słownik":
     update_activity("Słownik"); cats = sorted(list(set([c.get("category", "Inne") for c in st.session_state.flashcards])))
@@ -494,10 +498,8 @@ elif choice == "📊 Statystyki":
         st.subheader("🎯 Podział na poziomy")
         stats_rows = []
         for lvl in ["A1", "A2", "B1", "B2", "C1"]:
-            l_df = df[df['category'].str.contains(lvl, na=False)]; total = len(l_df)
-            know = len(l_df[l_df['next_review'].apply(is_word_mastered)]) if total > 0 else 0
-            perc = round((know/total)*100) if total > 0 else 0
-            stats_rows.append({"Poziom": lvl, "Słówek": total, "Opanowane": know, "Wiedza %": f"{perc}%"})
+            l_df = df[df['category'].str.contains(lvl, na=False)]; tot = len(l_df); kn = len(l_df[l_df['next_review'].apply(is_word_mastered)]) if tot > 0 else 0
+            stats_rows.append({"Poziom": lvl, "Słówek": tot, "Opanowane": kn, "Wiedza %": f"{round((kn/tot)*100) if tot > 0 else 0}%"})
         st.table(pd.DataFrame(stats_rows))
         st.subheader("📅 Nadchodzące powtórki")
         sched = [{"Data": (today_dt + timedelta(days=i)).strftime("%d.%m"), "Słów": len(df[df['next_review'] == str(today_dt + timedelta(days=i))])} for i in range(10)]
@@ -505,23 +507,37 @@ elif choice == "📊 Statystyki":
         st.subheader("📜 Historia Twoich Testów")
         h = st.session_state.user_data.get("test_history", [])
         if h: st.table(pd.DataFrame(h[::-1]).head(10)[["date", "score", "total", "perc"]])
-        else: st.info("Brak historii testów.")
 
-# --- 👑 ADMIN ---
+# --- 👑 ADMIN (STATYSTYKI MODUŁÓW + LINK KOSZTY) ---
 elif choice == "👑 Admin":
-    st.header("👑 Panel Admina"); users_db = load_j(AUTH_FILE, {}); adm_list = []; global_time = {m: 0.0 for m in MODULE_ORDER}
+    st.header("👑 Panel Admina")
+    # PRZYCISK FINANSOWY
+    st.link_button("💸 Otwórz Panel Kosztów OpenAI", "https://platform.openai.com/usage", use_container_width=True)
+    
+    users_db = load_j(AUTH_FILE, {})
+    adm_list = []; global_time = {m: 0.0 for m in MODULE_ORDER}
     m1, m2 = st.columns(2); t_words, t_ai_cost = 0, 0.0
     for usr in users_db:
-        ud, ub = load_j(get_p(usr, "user_data"), {}), load_j(get_p(usr, "flashcards"), [])
+        ud = load_j(get_p(usr, "user_data"), {})
+        ub = load_j(get_p(usr, "flashcards"), [])
         u_cost = ud.get("historical_cost", 0.0); t_words += len(ub); t_ai_cost += u_cost
+        
+        # Zliczanie pochodzenia słówek
+        man_n = len([x for x in ub if x.get("origin") == "Dodaj"])
+        gen_n = len([x for x in ub if x.get("origin") == "Generator"])
+        skan_n = len([x for x in ub if x.get("origin") == "Skaner"])
+        
         mastery = "0%"
         if ub:
             op = len([x for x in ub if is_word_mastered(x.get('next_review'))]); mastery = f"{round((op/len(ub))*100)}%"
         t_s = ud.get("time_stats", {})
         for m in MODULE_ORDER: global_time[m] += t_s.get(m, 0.0)
         u_times = ", ".join([f"{m[0]}:{round(s/60)}m" for m, s in t_s.items() if s > 15])
-        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Testy":len(ud.get("test_history", [])), "%":mastery, "Koszt (PLN)": round(u_cost, 2), "Ostatnio":ud.get("last_seen","Nigdy"), "Czas":u_times or "Brak"})
-    m1.metric("Łącznie słówek", t_words); m2.metric("Suma kosztów AI", f"{t_ai_cost:.2f} PLN"); st.table(pd.DataFrame(adm_list))
+        
+        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Ręcznie": man_n, "Gen": gen_n, "Skan": skan_n, "Testy":len(ud.get("test_history", [])), "%":mastery, "Koszt (PLN)": round(u_cost, 2), "Ostatnio":ud.get("last_seen","Nigdy"), "Czas":u_times or "Brak"})
+    
+    m1.metric("Łącznie słówek", t_words); m2.metric("Suma kosztów AI", f"{t_ai_cost:.2f} PLN")
+    st.table(pd.DataFrame(adm_list))
     if sum(global_time.values()) > 0:
         v = [global_time[m] for m in MODULE_ORDER]; l = [f"{m}: {round(v/60,1)}m" for m, v in zip(MODULE_ORDER, v)]
         fig = go.Figure(data=[go.Bar(x=MODULE_ORDER, y=v, text=l, textposition='auto', marker_color='#1E88E5')])
@@ -541,6 +557,6 @@ elif choice == "⚙️ Moje Konto":
     for i, lvl in enumerate(lvls):
         if col_d[i].button(f"Usuń {lvl}", disabled=not conf, use_container_width=True):
             st.session_state.flashcards = [x for x in st.session_state.flashcards if lvl in str(x.get('category',''))]
-            force_save(); st.success(f"Usunięto!"); st.rerun()
+            force_save(); st.rerun()
     if st.button("RESET CAŁEJ BAZY", type="primary", disabled=not conf, use_container_width=True):
         save_j(get_p(u, "flashcards"), []); st.session_state.flashcards = []; st.rerun()
