@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 from openai import OpenAI
 
 # --- KONFIGURACJA ---
-APP_VERSION = "V189 (Auto-Migration & Test Fix)"
+APP_VERSION = "V190 (Final Admin & Test Fix)"
 ADMIN_USER = "wobo"
 AUTH_FILE = "users_auth.json"
 SESSIONS_FILE = "sessions.json"
@@ -27,19 +27,23 @@ BONUS_START = 1089.0
 # Pobieranie klucza API
 API_KEY = st.secrets.get("OPENAI_API_KEY") or st.secrets.get("GEMINI_API_KEY") or st.session_state.get("manual_api_key", "")
 
-# MAPOWANIE SKRÓTÓW CZASU DLA ADMINA
-TIME_LABELS = {
-    "Powtórki": "Pow", "Trening": "Trn", "Quiz": "Qiz", "Fiszki": "Fis", 
-    "Testy": "Tst", "Skaner": "Skn", "Generator": "Gen", "Dodaj": "Dod", 
-    "Słownik": "Słn", "Konto": "Kon", "Inne": "Inn"
+# MAPOWANIE NAZW MODUŁÓW NA SKRÓTY (Admin)
+CLEAN_TIME_LABELS = {
+    "Powtórki": "Pow", "Nauka": "Pow", "Pow": "Pow",
+    "Trening": "Trn", "Trn": "Trn",
+    "Quiz": "Qiz", "Qiz": "Qiz",
+    "Fiszki": "Fis", "Fis": "Fis",
+    "Testy": "Tst", "Tst": "Tst",
+    "Skaner": "Skn", "Skaner AI": "Skn",
+    "Generator": "Gen", "Generator słów": "Gen",
+    "Dodaj": "Dod", "➕ Dodaj": "Dod",
+    "Słownik": "Słn", "📖 Słownik": "Słn",
+    "Konto": "Inn", "Moje Konto": "Inn", "Inne": "Inn"
 }
 
-MODULE_ORDER = [
-    "Powtórki", "Trening", "Quiz", "Fiszki", "Testy",
-    "Skaner", "Generator", "Dodaj", "Słownik"
-]
+MODULE_ORDER = ["Powtórki", "Trening", "Quiz", "Fiszki", "Testy", "Skaner", "Generator", "Dodaj", "Słownik"]
 
-# --- POTĘŻNA WEWNĘTRZNA BAZA SŁÓWEK (250 NA POZIOM) ---
+# --- POTĘŻNA WEWNĘTRZNA BAZA SŁÓWEK (1250 SŁÓW) ---
 VOCAB_DB = {
     "A1": [
         "Apfel", "Brot", "Haus", "Auto", "Schule", "Lehrer", "Wasser", "Milch", "Tisch", "Stuhl", "Buch", "Stift", "Kind", "Mutter", "Vater", "Freund", "Stadt", "Land", "Weg", "Zeit", "Essen", "Trinken", "Schlafen", "Lernen", "Arbeiten", "Gehen", "Kommen", "Hören", "Sehen", "Sprechen", "Groß", "Klein", "Gut", "Schlecht", "Schön", "Hässlich", "Alt", "Jung", "Neu", "Kalt", "Heute", "Morgen", "Gestern", "Woche", "Jahr", "Tag", "Nacht", "Name", "Zahl", "Geld",
@@ -53,7 +57,7 @@ VOCAB_DB = {
         "Abwaschen", "Anrufen", "Anziehen", "Aufräumen", "Ausgeben", "Aussehen", "Baden", "Bedeuten", "Beeilen", "Benutzen", "Berichten", "Beschreiben", "Besichtigen", "Bestimmen", "Besprechen", "Bewerben", "Bezahlen", "Buchen", "Buchstabieren", "Danken", "Dauern", "Diskutieren", "Drucken", "Duschen", "Einkaufen", "Einladen", "Einziehen", "Enden", "Entschuldigen", "Erinnern", "Erkennen", "Erlauben", "Erleben", "Erzählen", "Fehlen", "Feiern", "Fernsehen", "Frühstücken", "Fühlen", "Füttern", "Gehören", "Gewinnen", "Glauben", "Grillen", "Grüßen", "Heiraten", "Hoffen", "Holen", "Interessieren", "Kämmen",
         "Kennenlernen", "Klettern", "Klingeln", "Klopf", "Kochen", "Korrigieren", "Kosten", "Lächeln", "Laden", "Landem", "Laufen", "Leiden", "Leihen", "Leiten", "Lernen", "Liefern", "Lösen", "Lügen", "Machen", "Malen", "Meinen", "Merken", "Mieten", "Mitbringen", "Mitkommen", "Mitmachen", "Mitteilen", "Nachsehen", "Nennen", "Notieren", "Öffnen", "Organisieren", "Packen", "Parken", "Passieren", "Planen", "Probieren", "Prüfen", "Putzen", "Rauchen", "Regnen", "Reisen", "Renovieren", "Reparieren", "Reservieren", "Riechen", "Rufen", "Sammeln", "Schalten", "Schenken",
         "Schicken", "Schmecken", "Schminken", "Schneiden", "Schneien", "Schreiben", "Schwimmen", "Segeln", "Sehen", "Senden", "Setzen", "Singen", "Sitzen", "Sparen", "Spazieren", "Speichern", "Spielen", "Sprechen", "Springen", "Spülen", "Starten", "Stecken", "Stehen", "Stehlen", "Steigen", "Stellen", "Sterben", "Stimmen", "Stören", "Studieren", "Suchen", "Surfen", "Tanken", "Tanzen", "Tauschen", "Teilen", "Teilnehmen", "Telefonieren", "Tragen", "Träumen", "Treffen", "Trennen", "Trinken", "Trocknen", "Tun", "Überweisen", "Üben", "Übernachten", "Übersetzen", "Überweisen",
-        "Umziehen", "Unterhalten", "Unterschreiben", "Untersuchen", "Verabreden", "Verabschieden", "Verändern", "Verbessern", "Verbieten", "Verdienen", "Vergleichen", "Vergrößern", "Verkaufen", "Verlängern", "Verlassen", "Verlieren", "Vermieten", "Vermuten", "Verpassen", "Verreisen", "Verschieben", "Versprechen", "Verstehen", "Versuchen", "Verteilen", "Vertrauen", "Verursachen", "Verwenden", "Verzeihen", "Vorbereiten", "Vorstellen", "Wählen", "Wandern", "Warten", "Waschen", "Wechseln", "Wecken", "Wehtun", "Weitergehen", "Werden", "Werfen", "Wiederholen", "Wissen", "Wohnen", "Wünschen", "Zahlen", "Zeichnen", "Zeigen", "Zuhören", "Zumachen"
+        "Umziehen", "Unterhalten", "Unterschreiben", "Untersuch", "Verabreden", "Verabschieden", "Verändern", "Verbessern", "Verbieten", "Verdienen", "Vergleichen", "Vergrößern", "Verkaufen", "Verlängern", "Verlassen", "Verlieren", "Vermieten", "Vermuten", "Verpassen", "Verreisen", "Verschieben", "Versprechen", "Verstehen", "Versuchen", "Verteilen", "Vertrauen", "Verursachen", "Verwenden", "Verzeihen", "Vorbereiten", "Vorstellen", "Wählen", "Wandern", "Warten", "Waschen", "Wechseln", "Wecken", "Wehtun", "Weitergehen", "Werden", "Werfen", "Wiederholen", "Wissen", "Wohnen", "Wünschen", "Zahlen", "Zeichnen", "Zeigen", "Zuhören", "Zumachen"
     ],
     "B1": [
         "Erfahrung", "Erfolg", "Entscheidung", "Meinung", "Gefühl", "Beziehung", "Zukunft", "Vergangenheit", "Umwelt", "Natur", "Gesellschaft", "Politik", "Wirtschaft", "Wissenschaft", "Technik", "Beruf", "Ausbildung", "Studium", "Gehalt", "Vertrag", "Vorbereiten", "Organisieren", "Diskutieren", "Argumentieren", "Erklären", "Empfehlen", "Vorschlagen", "Warnen", "Hoffen", "Träumen", "Gefährlich", "Sicher", "Möglich", "Unmöglich", "Nötig", "Nützlich", "Schwierig", "Leicht", "Interessant", "Langweilig", "Obwohl", "Trotzdem", "Deshalb", "Deswegen", "Falls", "Damit", "Stattdessen", "Zuerst", "Schließlich", "Besonders",
@@ -102,7 +106,7 @@ def save_j(p, d):
         fd, temp_path = tempfile.mkstemp(dir=dir_name, text=True)
         with os.fdopen(fd, 'w', encoding='utf-8') as f: json.dump(d, f, indent=4)
         os.replace(temp_path, p)
-    except Exception as e:
+    except Exception:
         with open(p, "w", encoding="utf-8") as f: json.dump(d, f, indent=4)
 
 def is_word_mastered(next_review_date):
@@ -204,7 +208,6 @@ if not st.session_state.auth:
 # --- INIT DANYCH I AUTO-MIGRACJA ---
 u = st.session_state.user
 raw_flashcards = load_j(get_p(u, "flashcards"), [])
-# AUTO-MIGRACJA DLA STARYCH SŁÓWEK
 migrated = False
 for c in raw_flashcards:
     if "origin" not in c:
@@ -306,7 +309,7 @@ if choice in ["📅 Powtórki", "🚀 Trening"]:
                     if st.button("Dalej ➡️", use_container_width=True):
                         st.session_state.n_idx += 1; st.session_state.n_m = "ask"; st.rerun()
 
-# --- 📝 TESTY ---
+# --- 📝 TESTY (NAPRAWA LOGIKI 0/0) ---
 elif choice == "📝 Testy":
     update_activity("Testy"); st.header("📝 Egzamin Kontekstowy")
     if len(st.session_state.flashcards) < 5: st.warning("Min. 5 słówek.")
@@ -322,11 +325,12 @@ elif choice == "📝 Testy":
                     else:
                         sample = random.sample(filtered, min(n_q, len(filtered)))
                         words_str = ", ".join([f"{w['de']} ({w['pl']})" for w in sample])
-                        prompt = f"Generate EXACTLY {len(sample)} German questions for: {words_str}. Rotate types: 'LUKA', 'QUIZ', 'TLUMACZENIE'. JSON key 'questions'."
+                        prompt = f"Generate EXACTLY {len(sample)} German questions for: {words_str}. Rotate types: 'LUKA', 'QUIZ', 'TLUMACZENIE'. Provide 'correct', 'sentence', 'hint'. JSON key 'questions'."
                         try:
                             res = get_openai_response(prompt); data = parse_ai_json(res)
                             if data and "questions" in data and len(data["questions"]) > 0:
                                 valid_qs = [q for q in data["questions"] if all(k in q for k in ['type', 'correct', 'sentence'])]
+                                if not valid_qs: raise Exception("Brak poprawnych zadań w odpowiedzi AI.")
                                 st.session_state.test_q, st.session_state.test_idx, st.session_state.test_score = valid_qs, 0, 0
                                 st.session_state.user_data["historical_cost"] += 0.01; st.rerun()
                             else: st.error("AI nie zwróciło zadań. Spróbuj ponownie.")
@@ -354,7 +358,7 @@ elif choice == "📝 Testy":
                     if st.button("Zatwierdź", use_container_width=True): user_choice = u_ans
                 if user_choice is not None:
                     st.session_state.test_q[t_idx]['user_ans'] = user_choice
-                    if check_test_answer(user_choice, q): st.session_state.test_score += 1; st.toast("Dobrze!")
+                    if check_test_answer(user_choice, q): st.session_state.test_score += 1; st.toast("Dobrze! 🌟")
                     else: st.error(f"Źle. Poprawnie: {correct_w}"); time.sleep(1.2)
                     st.session_state.test_idx += 1; st.rerun()
             else:
@@ -423,9 +427,9 @@ elif choice == "📸 Skaner AI":
     src = st.camera_input("Zrób zdjęcie"); up = st.file_uploader("Lub wybierz plik")
     if (src or up) and st.button("🚀 ANALIZUJ", use_container_width=True):
         try:
-            with st.spinner("Przetwarzanie..."):
+            with st.spinner("Przetwarzanie obrazu..."):
                 img = Image.open(src or up).convert("RGB")
-                req = "Extract German vocabulary. Format: flashcards: [{de, pl, category, examples: [{de, pl}]}]"
+                req = "Extract German vocabulary. Format flashcards: [{de, pl, category, examples: [{de, pl}]}]"
                 res = get_openai_response(req, img_obj=img); data = parse_ai_json(res)
                 if isinstance(data, dict) and "flashcards" in data:
                     st.session_state.pending = data["flashcards"]
@@ -519,7 +523,7 @@ elif choice == "👑 Admin":
     st.header("👑 Panel Admina")
     st.link_button("💸 Otwórz Panel Kosztów OpenAI", "https://platform.openai.com/usage", use_container_width=True)
     users_db = load_j(AUTH_FILE, {})
-    adm_list = []; global_time = {m: 0.0 for m in MODULE_ORDER}
+    adm_list = []; global_time = {m: 0.0 for m in CLEAN_TIME_LABELS.values()}
     m1, m2 = st.columns(2); t_words, t_ai_cost = 0, 0.0
     for usr in users_db:
         ud = load_j(get_p(usr, "user_data"), {})
@@ -530,18 +534,13 @@ elif choice == "👑 Admin":
         skan_n = len([x for x in ub if x.get("origin") == "Skaner"])
         mastery = f"{round((len([x for x in ub if is_word_mastered(x.get('next_review'))])/len(ub))*100)}%" if ub else "0%"
         t_s = ud.get("time_stats", {})
-        u_times = []
+        merged_times = {}
         for m, s in t_s.items():
-            if s > 15:
-                label = TIME_LABELS.get(m, m[:3])
-                u_times.append(f"{label}:{round(s/60)}m")
-                if m in global_time: global_time[m] += s
-        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Ręcznie": man_n, "Gen": gen_n, "Skan": skan_n, "Testy":len(ud.get("test_history", [])), "%":mastery, "Ostatnio":ud.get("last_seen","Nigdy"), "Czas": ", ".join(u_times) or "Brak", "Koszt (PLN)": round(u_cost, 2)})
+            label = CLEAN_TIME_LABELS.get(m.strip(), "Inn")
+            merged_times[label] = merged_times.get(label, 0) + s
+        u_times_str = ", ".join([f"{l}:{round(s/60)}m" for l, s in merged_times.items() if s > 15])
+        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Ręcznie": man_n, "Gen": gen_n, "Skan": skan_n, "Testy":len(ud.get("test_history", [])), "%":mastery, "Ostatnio":ud.get("last_seen","Nigdy"), "Czas": u_times_str or "Brak", "Koszt (PLN)": round(u_cost, 2)})
     m1.metric("Łącznie słówek", t_words); m2.metric("Suma kosztów AI", f"{t_ai_cost:.2f} PLN"); st.table(pd.DataFrame(adm_list))
-    if sum(global_time.values()) > 0:
-        v = [global_time.get(m, 0) for m in MODULE_ORDER]; l = [f"{m}: {round(v/60,1)}m" for m, v in zip(MODULE_ORDER, v)]
-        fig = go.Figure(data=[go.Bar(x=MODULE_ORDER, y=v, text=l, textposition='auto', marker_color='#1E88E5')])
-        fig.update_layout(template="plotly_dark", height=400); st.plotly_chart(fig, use_container_width=True)
 
 # --- ⚙️ MOJE KONTO ---
 elif choice == "⚙️ Moje Konto":
