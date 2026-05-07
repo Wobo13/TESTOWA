@@ -18,7 +18,7 @@ import plotly.graph_objects as go
 from openai import OpenAI
 
 # --- KONFIGURACJA ---
-APP_VERSION = "V190 (Final Admin & Test Fix)"
+APP_VERSION = "V191 (Restored Charts & Robust Tests)"
 ADMIN_USER = "wobo"
 AUTH_FILE = "users_auth.json"
 SESSIONS_FILE = "sessions.json"
@@ -27,7 +27,7 @@ BONUS_START = 1089.0
 # Pobieranie klucza API
 API_KEY = st.secrets.get("OPENAI_API_KEY") or st.secrets.get("GEMINI_API_KEY") or st.session_state.get("manual_api_key", "")
 
-# MAPOWANIE NAZW MODUŁÓW NA SKRÓTY (Admin)
+# MAPOWANIE NAZW MODUŁÓW NA SKRÓTY (Admin & Charts)
 CLEAN_TIME_LABELS = {
     "Powtórki": "Pow", "Nauka": "Pow", "Pow": "Pow",
     "Trening": "Trn", "Trn": "Trn",
@@ -40,8 +40,6 @@ CLEAN_TIME_LABELS = {
     "Słownik": "Słn", "📖 Słownik": "Słn",
     "Konto": "Inn", "Moje Konto": "Inn", "Inne": "Inn"
 }
-
-MODULE_ORDER = ["Powtórki", "Trening", "Quiz", "Fiszki", "Testy", "Skaner", "Generator", "Dodaj", "Słownik"]
 
 # --- POTĘŻNA WEWNĘTRZNA BAZA SŁÓWEK (1250 SŁÓW) ---
 VOCAB_DB = {
@@ -319,7 +317,7 @@ elif choice == "📝 Testy":
             sel_kat = st.selectbox("🎯 Zakres:", ["Wszystkie"] + all_cats)
             n_q = st.slider("Liczba pytań", 5, 20, 5)
             if st.button("🚀 GENERUJ TEST", use_container_width=True, type="primary"):
-                with st.spinner("AI przygotowuje..."):
+                with st.spinner("AI przygotowuje zadania..."):
                     filtered = [c for c in st.session_state.flashcards if sel_kat == "Wszystkie" or c.get("category") == sel_kat]
                     if len(filtered) < 5: st.error("Zbyt mało słówek.")
                     else:
@@ -329,11 +327,11 @@ elif choice == "📝 Testy":
                         try:
                             res = get_openai_response(prompt); data = parse_ai_json(res)
                             if data and "questions" in data and len(data["questions"]) > 0:
-                                valid_qs = [q for q in data["questions"] if all(k in q for k in ['type', 'correct', 'sentence'])]
-                                if not valid_qs: raise Exception("Brak poprawnych zadań w odpowiedzi AI.")
+                                valid_qs = [q for q in data["questions"] if any(k in q for k in ['sentence', 'question']) and 'correct' in q]
+                                if not valid_qs: raise Exception("AI nie zwróciło poprawnych zadań.")
                                 st.session_state.test_q, st.session_state.test_idx, st.session_state.test_score = valid_qs, 0, 0
                                 st.session_state.user_data["historical_cost"] += 0.01; st.rerun()
-                            else: st.error("AI nie zwróciło zadań. Spróbuj ponownie.")
+                            else: st.error("AI zwróciło pustą listę. Spróbuj ponownie.")
                         except Exception as e: st.error(f"Błąd AI: {e}")
         else:
             qs = st.session_state.test_q; t_idx = st.session_state.test_idx
@@ -341,19 +339,20 @@ elif choice == "📝 Testy":
                 q = qs[t_idx]; st.write(f"### Pytanie {t_idx+1} z {len(qs)}"); st.progress(t_idx / len(qs))
                 correct_w = str(q.get('correct', '')); hint = q.get('hint', 'brak')
                 place_h = " ".join(["_"] * len(correct_w)) if correct_w else "_______"
+                sentence = q.get('sentence') or q.get('question', '')
                 user_choice = None
                 if q.get('type') == "LUKA":
-                    st.info(f"Podpowiedź (PL): {hint}"); disp = q['sentence'].replace(correct_w, place_h).replace(correct_w.capitalize(), place_h)
+                    st.info(f"Podpowiedź (PL): {hint}"); disp = sentence.replace(correct_w, place_h).replace(correct_w.capitalize(), place_h)
                     st.markdown(f"#### `{disp}`"); u_ans = st.text_input("Wpisz słowo:", key=f"t_in_{t_idx}")
                     if st.button("Zatwierdź", use_container_width=True): user_choice = u_ans
                 elif q.get('type') == "QUIZ":
-                    st.info(f"Podpowiedź (PL): {hint}"); st.markdown(f"#### `{q['sentence'].replace(correct_w, '_______')}`")
+                    st.info(f"Podpowiedź (PL): {hint}"); st.markdown(f"#### `{sentence.replace(correct_w, '_______')}`")
                     opts = list(set(q.get('distractors', []) + [correct_w])); random.seed(t_idx); random.shuffle(opts)
                     cols = st.columns(2)
                     for i, opt in enumerate(opts):
                         if cols[i%2].button(opt, use_container_width=True, key=f"btn_{t_idx}_{i}"): user_choice = opt
                 else:
-                    st.info("Przetłumacz na niemiecki:"); st.markdown(f"#### {q['sentence']}")
+                    st.info("Przetłumacz na niemiecki:"); st.markdown(f"#### {sentence}")
                     u_ans = st.text_input("Twoja odpowiedź:", key=f"t_tr_{t_idx}")
                     if st.button("Zatwierdź", use_container_width=True): user_choice = u_ans
                 if user_choice is not None:
@@ -362,7 +361,7 @@ elif choice == "📝 Testy":
                     else: st.error(f"Źle. Poprawnie: {correct_w}"); time.sleep(1.2)
                     st.session_state.test_idx += 1; st.rerun()
             else:
-                score = st.session_state.test_score; total = len(qs)
+                score, total = st.session_state.test_score, len(qs)
                 perc = round((score/total)*100) if total > 0 else 0
                 st.session_state.user_data["test_history"].append({"date": datetime.now().strftime("%d.%m %H:%M"), "score": score, "total": total, "perc": perc})
                 save_j(get_p(u, "user_data"), st.session_state.user_data); st.balloons()
@@ -371,7 +370,7 @@ elif choice == "📝 Testy":
                     is_ok = check_test_answer(q.get('user_ans',''), q)
                     icon, col = ("✅", "#2E7D32") if is_ok else ("❌", "#C62828")
                     with st.expander(f"{icon} Pytanie {i+1}"):
-                        st.write(f"**Zdanie:** {q.get('sentence','')}")
+                        st.write(f"**Zdanie:** {q.get('sentence') or q.get('question', '')}")
                         st.markdown(f'<div style="border-left:5px solid {col}; padding-left:10px;">Twoja: {q.get("user_ans","")}<br>Poprawna: {q.get("correct","")}</div>', unsafe_allow_html=True)
                 if st.button("Powrót", use_container_width=True): del st.session_state.test_q; st.rerun()
 
@@ -466,7 +465,7 @@ elif choice == "📦 Generator słów":
                         added = 0
                         for w in data["flashcards"]:
                             t_de, t_pl = w.get('de') or w.get('word'), w.get('pl') or w.get('translation')
-                            cat_raw = w.get('category', 'Inne')
+                            cat_raw = w.get('category', 'Podstawowe')
                             if cat_raw.lower() in ['inne', 'other']: cat_raw = 'Podstawowe'
                             if t_de and t_pl and t_de.lower() not in [x['de'].lower() for x in st.session_state.flashcards]:
                                 w.update({"de": t_de, "pl": t_pl, "next_review": str(today_dt), "date_added": str(today_dt), "category": f"{lvl} - {cat_raw}", "origin": "Generator"})
@@ -518,12 +517,12 @@ elif choice == "📊 Statystyki":
         h = st.session_state.user_data.get("test_history", [])
         if h: st.table(pd.DataFrame(h[::-1]).head(10)[["date", "score", "total", "perc"]])
 
-# --- 👑 ADMIN (STATYSTYKI MODUŁÓW + LINK KOSZTY) ---
+# --- 👑 ADMIN ---
 elif choice == "👑 Admin":
     st.header("👑 Panel Admina")
     st.link_button("💸 Otwórz Panel Kosztów OpenAI", "https://platform.openai.com/usage", use_container_width=True)
     users_db = load_j(AUTH_FILE, {})
-    adm_list = []; global_time = {m: 0.0 for m in CLEAN_TIME_LABELS.values()}
+    adm_list = []; global_time = {l: 0.0 for l in set(CLEAN_TIME_LABELS.values())}
     m1, m2 = st.columns(2); t_words, t_ai_cost = 0, 0.0
     for usr in users_db:
         ud = load_j(get_p(usr, "user_data"), {})
@@ -538,9 +537,20 @@ elif choice == "👑 Admin":
         for m, s in t_s.items():
             label = CLEAN_TIME_LABELS.get(m.strip(), "Inn")
             merged_times[label] = merged_times.get(label, 0) + s
+            global_time[label] = global_time.get(label, 0) + s
         u_times_str = ", ".join([f"{l}:{round(s/60)}m" for l, s in merged_times.items() if s > 15])
-        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Ręcznie": man_n, "Gen": gen_n, "Skan": skan_n, "Testy":len(ud.get("test_history", [])), "%":mastery, "Ostatnio":ud.get("last_seen","Nigdy"), "Czas": u_times_str or "Brak", "Koszt (PLN)": round(u_cost, 2)})
-    m1.metric("Łącznie słówek", t_words); m2.metric("Suma kosztów AI", f"{t_ai_cost:.2f} PLN"); st.table(pd.DataFrame(adm_list))
+        adm_list.append({"Użytkownik":usr, "Słów":len(ub), "Ręcznie": man_n, "Gen": gen_n, "Skan": skan_n, "Testy":len(ud.get("test_history", [])), "%":mastery, "Ostatnio":ud.get("last_seen","Nigdy"), "Czas": u_times_str or "Brak", "Koszt (PLN)": round(u_cost, 4)})
+    m1.metric("Łącznie słówek", t_words); m2.metric("Suma kosztów AI", f"{t_ai_cost:.2f} PLN")
+    st.table(pd.DataFrame(adm_list))
+    
+    # PRZYWRÓCONY WYKRES PLOTLY
+    if sum(global_time.values()) > 0:
+        labels_ordered = ["Pow", "Trn", "Qiz", "Fis", "Tst", "Skn", "Gen", "Dod", "Słn", "Inn"]
+        vals = [global_time.get(l, 0) for l in labels_ordered]
+        text_labels = [f"{round(v/60,1)}m" for v in vals]
+        fig = go.Figure(data=[go.Bar(x=labels_ordered, y=vals, text=text_labels, textposition='auto', marker_color='#1E88E5')])
+        fig.update_layout(template="plotly_dark", height=400, title="Globalny czas w modułach (minuty)")
+        st.plotly_chart(fig, use_container_width=True)
 
 # --- ⚙️ MOJE KONTO ---
 elif choice == "⚙️ Moje Konto":
