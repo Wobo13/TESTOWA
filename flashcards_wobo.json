@@ -1,0 +1,752 @@
+[
+    {
+        "de": "Hallo",
+        "pl": "Cze\u015b\u0107",
+        "category": "A1 - Pozdrowienia",
+        "examples": [
+            {
+                "de": "Hallo! Wie geht es dir?",
+                "pl": "Cze\u015b\u0107! Jak si\u0119 masz?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Danke",
+        "pl": "Dzi\u0119kuj\u0119",
+        "category": "A1 - Pozdrowienia",
+        "examples": [
+            {
+                "de": "Danke sch\u00f6n f\u00fcr die Hilfe!",
+                "pl": "Dzi\u0119kuj\u0119 bardzo za pomoc!"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Bitte",
+        "pl": "Prosz\u0119",
+        "category": "A1 - Pozdrowienia",
+        "examples": [
+            {
+                "de": "Bitte, nehmen Sie Platz.",
+                "pl": "Prosz\u0119, usi\u0105d\u017a."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Ja",
+        "pl": "Tak",
+        "category": "A1 - S\u0142owa podstawowe",
+        "examples": [
+            {
+                "de": "Ja, das stimmt.",
+                "pl": "Tak, to prawda."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Nein",
+        "pl": "Nie",
+        "category": "A1 - S\u0142owa podstawowe",
+        "examples": [
+            {
+                "de": "Nein, das ist nicht richtig.",
+                "pl": "Nie, to nie jest poprawne."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Ich",
+        "pl": "Ja",
+        "category": "A1 - Zaimki",
+        "examples": [
+            {
+                "de": "Ich hei\u00dfe Anna.",
+                "pl": "Nazywam si\u0119 Anna."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Du",
+        "pl": "Ty",
+        "category": "A1 - Zaimki",
+        "examples": [
+            {
+                "de": "Woher kommst du?",
+                "pl": "Sk\u0105d pochodzisz?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Er",
+        "pl": "On",
+        "category": "A1 - Zaimki",
+        "examples": [
+            {
+                "de": "Er ist mein Bruder.",
+                "pl": "On jest moim bratem."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Sie",
+        "pl": "Ona",
+        "category": "A1 - Zaimki",
+        "examples": [
+            {
+                "de": "Sie ist meine Schwester.",
+                "pl": "Ona jest moj\u0105 siostr\u0105."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Wir",
+        "pl": "My",
+        "category": "A1 - Zaimki",
+        "examples": [
+            {
+                "de": "Wir lernen Deutsch.",
+                "pl": "Uczymy si\u0119 niemieckiego."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Eins",
+        "pl": "Jeden",
+        "category": "A1 - Liczby",
+        "examples": [
+            {
+                "de": "Ich habe einen Hund.",
+                "pl": "Mam jednego psa."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Zwei",
+        "pl": "Dwa",
+        "category": "A1 - Liczby",
+        "examples": [
+            {
+                "de": "Wir haben zwei Katzen.",
+                "pl": "Mamy dwa koty."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Drei",
+        "pl": "Trzy",
+        "category": "A1 - Liczby",
+        "examples": [
+            {
+                "de": "Es sind drei \u00c4pfel.",
+                "pl": "S\u0105 trzy jab\u0142ka."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Haus",
+        "pl": "Dom",
+        "category": "A1 - Przedmioty domowe",
+        "examples": [
+            {
+                "de": "Ich wohne in einem Haus.",
+                "pl": "Mieszkam w domu."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Tisch",
+        "pl": "St\u00f3\u0142",
+        "category": "A1 - Przedmioty domowe",
+        "examples": [
+            {
+                "de": "Der Tisch ist gro\u00df.",
+                "pl": "St\u00f3\u0142 jest du\u017cy."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Stuhl",
+        "pl": "Krzes\u0142o",
+        "category": "A1 - Przedmioty domowe",
+        "examples": [
+            {
+                "de": "Ich sitze auf einem Stuhl.",
+                "pl": "Siedz\u0119 na krze\u015ble."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Wasser",
+        "pl": "Woda",
+        "category": "A1 - Jedzenie i napoje",
+        "examples": [
+            {
+                "de": "Ich trinke viel Wasser.",
+                "pl": "Pij\u0119 du\u017co wody."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Brot",
+        "pl": "Chleb",
+        "category": "A1 - Jedzenie i napoje",
+        "examples": [
+            {
+                "de": "Ich esse gern Brot.",
+                "pl": "Ch\u0119tnie jem chleb."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Milch",
+        "pl": "Mleko",
+        "category": "A1 - Jedzenie i napoje",
+        "examples": [
+            {
+                "de": "M\u00f6chtest du Milch im Kaffee?",
+                "pl": "Chcesz mleko do kawy?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Apfel",
+        "pl": "Jab\u0142ko",
+        "category": "A1 - Owoce",
+        "examples": [
+            {
+                "de": "Ich esse jeden Tag einen Apfel.",
+                "pl": "Codziennie jem jab\u0142ko."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Rot",
+        "pl": "Czerwony",
+        "category": "A1 - Kolory",
+        "examples": [
+            {
+                "de": "Das Auto ist rot.",
+                "pl": "Samoch\u00f3d jest czerwony."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Blau",
+        "pl": "Niebieski",
+        "category": "A1 - Kolory",
+        "examples": [
+            {
+                "de": "Der Himmel ist blau.",
+                "pl": "Niebo jest niebieskie."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Gr\u00fcn",
+        "pl": "Zielony",
+        "category": "A1 - Kolory",
+        "examples": [
+            {
+                "de": "Das Gras ist gr\u00fcn.",
+                "pl": "Trawa jest zielona."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Gro\u00df",
+        "pl": "Du\u017cy",
+        "category": "A1 - Przymiotniki",
+        "examples": [
+            {
+                "de": "Das ist ein gro\u00dfes Haus.",
+                "pl": "To jest du\u017cy dom."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Klein",
+        "pl": "Ma\u0142y",
+        "category": "A1 - Przymiotniki",
+        "examples": [
+            {
+                "de": "Ich habe einen kleinen Hund.",
+                "pl": "Mam ma\u0142ego psa."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Auto",
+        "pl": "Samoch\u00f3d",
+        "category": "B1 - Podr\u00f3\u017ce i Transport",
+        "examples": [
+            {
+                "de": "Ich fahre jeden Tag mit dem Auto zur Arbeit.",
+                "pl": "Codziennie jad\u0119 samochodem do pracy."
+            },
+            {
+                "de": "Wir brauchen ein neues Auto f\u00fcr die Familie.",
+                "pl": "Potrzebujemy nowego samochodu dla rodziny."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Fahrrad",
+        "pl": "Rower",
+        "category": "B1 - Podr\u00f3\u017ce i Transport",
+        "examples": [
+            {
+                "de": "Er f\u00e4hrt oft mit dem Fahrrad in die Stadt.",
+                "pl": "On cz\u0119sto je\u017adzi na rowerze do miasta."
+            },
+            {
+                "de": "M\u00f6chtest du mein Fahrrad ausleihen?",
+                "pl": "Chcesz po\u017cyczy\u0107 m\u00f3j rower?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Zug",
+        "pl": "Poci\u0105g",
+        "category": "B1 - Podr\u00f3\u017ce i Transport",
+        "examples": [
+            {
+                "de": "Der Zug nach Berlin f\u00e4hrt um 10 Uhr ab.",
+                "pl": "Poci\u0105g do Berlina odje\u017cd\u017ca o 10:00."
+            },
+            {
+                "de": "Ich reise lieber mit dem Zug als mit dem Bus.",
+                "pl": "Wol\u0119 podr\u00f3\u017cowa\u0107 poci\u0105giem ni\u017c autobusem."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Kino",
+        "pl": "Kino",
+        "category": "B1 - Czas wolny",
+        "examples": [
+            {
+                "de": "Am Wochenende gehen wir ins Kino.",
+                "pl": "W weekend idziemy do kina."
+            },
+            {
+                "de": "Welchen Film m\u00f6chtest du im Kino sehen?",
+                "pl": "Jaki film chcia\u0142by\u015b zobaczy\u0107 w kinie?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Buch",
+        "pl": "Ksi\u0105\u017cka",
+        "category": "B1 - Czas wolny",
+        "examples": [
+            {
+                "de": "Ich lese gerne ein gutes Buch am Abend.",
+                "pl": "Lubi\u0119 czyta\u0107 dobr\u0105 ksi\u0105\u017ck\u0119 wieczorem."
+            },
+            {
+                "de": "Dieses Buch ist sehr interessant.",
+                "pl": "Ta ksi\u0105\u017cka jest bardzo interesuj\u0105ca."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Computer",
+        "pl": "Komputer",
+        "category": "B1 - Technologia",
+        "examples": [
+            {
+                "de": "Ich arbeite den ganzen Tag am Computer.",
+                "pl": "Ca\u0142y dzie\u0144 pracuj\u0119 przy komputerze."
+            },
+            {
+                "de": "Brauchst du einen neuen Computer f\u00fcr dein Studium?",
+                "pl": "Potrzebujesz nowego komputera do nauki?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Handy",
+        "pl": "Telefon kom\u00f3rkowy",
+        "category": "B1 - Technologia",
+        "examples": [
+            {
+                "de": "Mein Handy klingelt, ich muss antworten.",
+                "pl": "Dzwoni m\u00f3j telefon, musz\u0119 odebra\u0107."
+            },
+            {
+                "de": "Hast du dein Handy dabei?",
+                "pl": "Masz przy sobie sw\u00f3j telefon kom\u00f3rkowy?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Arbeit",
+        "pl": "Praca",
+        "category": "B1 - Praca i Kariera",
+        "examples": [
+            {
+                "de": "Ich habe diese Woche viel Arbeit zu erledigen.",
+                "pl": "W tym tygodniu mam du\u017co pracy do wykonania."
+            },
+            {
+                "de": "Nach der Arbeit gehe ich nach Hause.",
+                "pl": "Po pracy id\u0119 do domu."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "B\u00fcro",
+        "pl": "Biuro",
+        "category": "B1 - Praca i Kariera",
+        "examples": [
+            {
+                "de": "Mein B\u00fcro befindet sich im dritten Stock.",
+                "pl": "Moje biuro znajduje si\u0119 na trzecim pi\u0119trze."
+            },
+            {
+                "de": "Ich muss morgen fr\u00fch ins B\u00fcro.",
+                "pl": "Musz\u0119 jutro wcze\u015bnie i\u015b\u0107 do biura."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Restaurant",
+        "pl": "Restauracja",
+        "category": "B1 - Jedzenie i Napoje",
+        "examples": [
+            {
+                "de": "Wir gehen heute Abend in ein italienisches Restaurant.",
+                "pl": "Dzi\u015b wieczorem idziemy do w\u0142oskiej restauracji."
+            },
+            {
+                "de": "Dieses Restaurant hat sehr gutes Essen.",
+                "pl": "Ta restauracja ma bardzo dobre jedzenie."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Essen",
+        "pl": "Jedzenie",
+        "category": "B1 - Jedzenie i Napoje",
+        "examples": [
+            {
+                "de": "Das Essen schmeckt sehr gut, vielen Dank.",
+                "pl": "Jedzenie smakuje bardzo dobrze, dzi\u0119kuj\u0119."
+            },
+            {
+                "de": "Wir haben viel Essen f\u00fcr die Party gekauft.",
+                "pl": "Kupili\u015bmy du\u017co jedzenia na przyj\u0119cie."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Trinken",
+        "pl": "Pi\u0107",
+        "category": "B1 - Jedzenie i Napoje",
+        "examples": [
+            {
+                "de": "Ich m\u00f6chte etwas trinken, ich habe Durst.",
+                "pl": "Chcia\u0142bym co\u015b wypi\u0107, jestem spragniony."
+            },
+            {
+                "de": "Was m\u00f6chtest du trinken, Kaffee oder Tee?",
+                "pl": "Co chcia\u0142by\u015b wypi\u0107, kaw\u0119 czy herbat\u0119?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Supermarkt",
+        "pl": "Supermarket",
+        "category": "B1 - Zakupy i Us\u0142ugi",
+        "examples": [
+            {
+                "de": "Ich muss in den Supermarkt gehen, um Lebensmittel zu kaufen.",
+                "pl": "Musz\u0119 i\u015b\u0107 do supermarketu, \u017ceby kupi\u0107 artyku\u0142y spo\u017cywcze."
+            },
+            {
+                "de": "Der Supermarkt ist bis 20 Uhr ge\u00f6ffnet.",
+                "pl": "Supermarket jest otwarty do godziny 20:00."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Kleidung",
+        "pl": "Ubranie / Odzie\u017c",
+        "category": "B1 - Zakupy i Us\u0142ugi",
+        "examples": [
+            {
+                "de": "Ich brauche neue Kleidung f\u00fcr den Winter.",
+                "pl": "Potrzebuj\u0119 nowych ubra\u0144 na zim\u0119."
+            },
+            {
+                "de": "Sie kauft gerne elegante Kleidung.",
+                "pl": "Ona lubi kupowa\u0107 eleganckie ubrania."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Wohnung",
+        "pl": "Mieszkanie",
+        "category": "B1 - Mieszkanie",
+        "examples": [
+            {
+                "de": "Wir suchen eine neue Wohnung in der Stadt.",
+                "pl": "Szukamy nowego mieszkania w mie\u015bcie."
+            },
+            {
+                "de": "Meine Wohnung hat drei gro\u00dfe Zimmer.",
+                "pl": "Moje mieszkanie ma trzy du\u017ce pokoje."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Zimmer",
+        "pl": "Pok\u00f3j",
+        "category": "B1 - Mieszkanie",
+        "examples": [
+            {
+                "de": "Das Schlafzimmer ist sehr gem\u00fctlich eingerichtet.",
+                "pl": "Sypialnia jest bardzo przytulnie urz\u0105dzona."
+            },
+            {
+                "de": "Mein Zimmer ist im ersten Stock.",
+                "pl": "M\u00f3j pok\u00f3j jest na pierwszym pi\u0119trze."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Freund",
+        "pl": "Przyjaciel",
+        "category": "B1 - Relacje",
+        "examples": [
+            {
+                "de": "Er ist mein bester Freund seit der Kindheit.",
+                "pl": "On jest moim najlepszym przyjacielem od dzieci\u0144stwa."
+            },
+            {
+                "de": "Ich treffe mich heute Abend mit einem Freund.",
+                "pl": "Spotykam si\u0119 dzi\u015b wieczorem z przyjacielem."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Familie",
+        "pl": "Rodzina",
+        "category": "B1 - Rodzina",
+        "examples": [
+            {
+                "de": "Meine Familie wohnt in einer anderen Stadt.",
+                "pl": "Moja rodzina mieszka w innym mie\u015bcie."
+            },
+            {
+                "de": "Wir besuchen unsere Familie zu Weihnachten.",
+                "pl": "Odwiedzamy nasz\u0105 rodzin\u0119 na Bo\u017ce Narodzenie."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Schule",
+        "pl": "Szko\u0142a",
+        "category": "B1 - Edukacja",
+        "examples": [
+            {
+                "de": "Meine Kinder gehen gerne in die Schule.",
+                "pl": "Moje dzieci ch\u0119tnie chodz\u0105 do szko\u0142y."
+            },
+            {
+                "de": "Die Schule beginnt jeden Morgen um acht Uhr.",
+                "pl": "Szko\u0142a zaczyna si\u0119 ka\u017cdego ranka o \u00f3smej."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Lehrer",
+        "pl": "Nauczyciel",
+        "category": "B1 - Edukacja",
+        "examples": [
+            {
+                "de": "Unser Lehrer erkl\u00e4rt alles sehr gut und geduldig.",
+                "pl": "Nasz nauczyciel bardzo dobrze i cierpliwie wszystko wyja\u015bnia."
+            },
+            {
+                "de": "Sie m\u00f6chte sp\u00e4ter Lehrerin an der Universit\u00e4t werden.",
+                "pl": "Ona chce p\u00f3\u017aniej zosta\u0107 nauczycielk\u0105 na uniwersytecie."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Wetter",
+        "pl": "Pogoda",
+        "category": "B1 - Pogoda",
+        "examples": [
+            {
+                "de": "Das Wetter ist heute sehr sch\u00f6n und sonnig.",
+                "pl": "Pogoda jest dzi\u015b bardzo \u0142adna i s\u0142oneczna."
+            },
+            {
+                "de": "Wie ist das Wetter in Berlin am Wochenende?",
+                "pl": "Jaka jest pogoda w Berlinie w weekend?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Sonne",
+        "pl": "S\u0142o\u0144ce",
+        "category": "B1 - Pogoda",
+        "examples": [
+            {
+                "de": "Die Sonne scheint den ganzen Tag vom blauen Himmel.",
+                "pl": "S\u0142o\u0144ce \u015bwieci ca\u0142y dzie\u0144 z b\u0142\u0119kitnego nieba."
+            },
+            {
+                "de": "Ich mag es, im Sommer in der Sonne zu sitzen.",
+                "pl": "Lubi\u0119 siedzie\u0107 na s\u0142o\u0144cu latem."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Regen",
+        "pl": "Deszcz",
+        "category": "B1 - Pogoda",
+        "examples": [
+            {
+                "de": "Es regnet den ganzen Morgen ununterbrochen.",
+                "pl": "Ca\u0142y ranek pada deszcz bez przerwy."
+            },
+            {
+                "de": "Wir brauchen einen Regenschirm, wenn es Regen gibt.",
+                "pl": "Potrzebujemy parasola, je\u015bli b\u0119dzie deszcz."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Geld",
+        "pl": "Pieni\u0105dze",
+        "category": "B1 - Zakupy i Us\u0142ugi",
+        "examples": [
+            {
+                "de": "Ich habe nicht genug Geld f\u00fcr dieses neue Handy.",
+                "pl": "Nie mam wystarczaj\u0105co du\u017co pieni\u0119dzy na ten nowy telefon."
+            },
+            {
+                "de": "Er verdient viel Geld mit seiner neuen Arbeit.",
+                "pl": "On zarabia du\u017co pieni\u0119dzy na swojej nowej pracy."
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    },
+    {
+        "de": "Zeit",
+        "pl": "Czas",
+        "category": "B1 - \u017bycie codzienne",
+        "examples": [
+            {
+                "de": "Ich habe leider keine Zeit f\u00fcr meine Hobbys.",
+                "pl": "Niestety nie mam czasu na moje hobby."
+            },
+            {
+                "de": "Wie viel Zeit brauchen wir noch daf\u00fcr?",
+                "pl": "Ile czasu jeszcze na to potrzebujemy?"
+            }
+        ],
+        "next_review": "2026-05-07",
+        "date_added": "2026-05-07"
+    }
+]
