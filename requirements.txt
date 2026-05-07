@@ -1,6 +1,6 @@
 streamlit
-google-generativeai
+openai
 pandas
 Pillow
-gTTS
 plotly
+gTTS
